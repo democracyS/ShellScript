@@ -2,8 +2,8 @@
 #!/bin/bash
 
 Automating
-1. Hosting-Linux
-useradd: ftp_id
-passwd: ftp_pw
-database: ftp_id, db_pw
-quota: p_name
+1. Web Hosting-Linux <br>
+useradd: ftp_id <br>
+passwd: ftp_pw <br>
+database: ftp_id, db_pw <br>
+quota: p_name <br>
