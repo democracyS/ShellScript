@@ -4,7 +4,7 @@ echo
 lastup=$(</root/date.txt)
 echo "last hosting user update : '$lastup'"
 
-fid=$(exec mysql -u[DB_user] -h[DB_addr] -p[DB_passwd] -N -e "select ftp_id from g5.shop_order where od_receipt_time > '$lastup'")
+fid=$(exec mysql -u[DB_user] -h[DB_addr] -p[DB_passwd] -N -e "select ftp_id from [DB_name].[Table_name] where od_receipt_time > '$lastup'")
 
 echo
 echo ===========================================
@@ -13,7 +13,7 @@ echo ===========================================
 
 for i in $fid; do
 useradd -d /host/"$i" $i
-fpw=$(exec mysql -u[DB_user] -h[DB_addr] -p[DB_passwd] -N -e "select ftp_pw from g5.shop_order where od_receipt_time > '$lastup' and ftp_id='$i'")
+fpw=$(exec mysql -u[DB_user] -h[DB_addr] -p[DB_passwd] -N -e "select ftp_pw from [DB_name].[Table_name] where od_receipt_time > '$lastup' and ftp_id='$i'")
 (echo "$fpw"; echo "$fpw") | passwd $i
 echo "'$i' is added"
 echo
@@ -32,14 +32,14 @@ done;
 # create database
 
 for i in $fid; do
-dpw=$(exec mysql -u[DB_user] -h[DB_addr] -p[DB_passwd] -N -e "select db_pw from g5.shop_order where od_receipt_time > '$lastup' and ftp_id='$i'")
+dpw=$(exec mysql -u[DB_user] -h[DB_addr] -p[DB_passwd] -N -e "select db_pw from [DB_name].[Table_name] where od_receipt_time > '$lastup' and ftp_id='$i'")
 (echo "create database $i;"; echo "grant all privileges on $i.* to '$i'@'%' identified by '$dpw';"; echo "flush privileges;"; echo "show grants for '$i'@'%';") | mysql -u[DB_user] -p[DB_passwd]
 done;
 
 # create quota
 
 for i in $fid; do
-pname=$(exec mysql -u[DB_user] -h[DB_addr] -p[DB_passwd] -N -e "select p_name from g5.shop_order where od_receipt_time > '$lastup' and ftp_id='$i'")
+pname=$(exec mysql -u[DB_user] -h[DB_addr] -p[DB_passwd] -N -e "select p_name from [DB_name].[Table_name] where od_receipt_time > '$lastup' and ftp_id='$i'")
 edquota -p $pname $i
 done;
 
